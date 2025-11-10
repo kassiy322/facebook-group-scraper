@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBSoft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .controls {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .url-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .url-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .url-input input::placeholder {
+            color: #666;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-group-parser {
+            background: linear-gradient(135deg, #03a9f4 0%, #0288d1 100%);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(3, 169, 244, 0.35);
+        }
+
+        .btn-group-parser:hover {
+            background: linear-gradient(135deg, #039be5 0%, #0277bd 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(3, 169, 244, 0.45);
+        }
+
+        .btn-contact {
+            background: #0088cc;
+            color: white;
+            font-size: 12px;
+            padding: 8px 16px;
+        }
+
+        .btn-contact:hover {
+            background: #006699;
+            transform: translateY(-1px);
+        }
+
+        .btn-profile-scraper {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-profile-scraper:hover {
+            background: linear-gradient(135deg, #FF5252 0%, #FF7043 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-manual {
+            background: linear-gradient(135deg, #9C27B0 0%, #673AB7 100%);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+        }
+
+        .btn-manual:hover {
+            background: linear-gradient(135deg, #8E24AA 0%, #5E35B1 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f44336;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.active {
+            background: #4CAF50;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .browser-container {
+            flex: 1;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            margin: 0 20px 20px 20px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .browser-header {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .browser-dot.red { background: #ff5f57; }
+        .browser-dot.yellow { background: #ffbd2e; }
+        .browser-dot.green { background: #28ca42; }
+
+        .browser-url {
+            flex: 1;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #666;
+            margin-left: 16px;
+        }
+
+        #browser {
+            width: 100%;
+            height: 100%;
+            border: none;
+            min-height: 500px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .stats-section {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stats-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .stats-note {
+            font-size: 12px;
+            opacity: 0.75;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            font-size: 16px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FBSoft</h1>
+        <p>Экспорт участников групп и парсинг профилей Facebook в один клик</p>
+    </div>
+
+    <div class="main-content">
+        <div class="controls">
+            <div class="url-input">
+                <input type="text" id="groupUrl" placeholder="Вставьте ссылку на группу Facebook (например: https://www.facebook.com/groups/yourgroup)">
+                <button class="btn btn-primary" onclick="loadGroup()">Загрузить группу</button>
+                <button class="btn btn-contact" onclick="openTelegram()">📱 Связь</button>
+                <button class="btn btn-secondary" onclick="injectScript()">Запустить скрипт (авто)</button>
+                <button class="btn btn-manual" onclick="injectScriptManual()">Запустить скрипт (ручной)</button>
+                <button class="btn btn-group-parser" onclick="injectGroupParser()">🧭 Парсинг групп</button>
+                <button class="btn btn-profile-scraper" onclick="scrapeLinks()">🔍 Парсить профили</button>
+                <button class="btn btn-secondary" onclick="logout()">🚪 Выйти</button>
+            </div>
+            
+            <div class="status">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">Ожидание загрузки группы</span>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Загружаем Facebook...</p>
+        </div>
+
+        <div class="browser-container">
+            <div class="browser-header">
+                <div class="browser-dots">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                </div>
+                <input type="text" class="browser-url" id="currentUrl" readonly value="facebook.com">
+            </div>
+            <webview id="browser" partition="persist:fb" src="https://www.facebook.com"></webview>
+        </div>
+
+        <div class="stats">
+            <div class="stats-section">
+                <span>Найдено участников:</span>
+                <span class="stat-value member-count" id="memberCount">0</span>
+            </div>
+            <div class="stats-section">
+                <span>Найдено групп:</span>
+                <span class="stat-value group-count" id="groupCount">0</span>
+                <span class="stats-note" id="groupStatusNote">Ожидание запуска парсинга</span>
+            </div>
+            <div class="stats-actions">
+                <button class="btn btn-primary" onclick="downloadCSV()" style="display: none;" id="downloadBtn">
+                    📥 Скачать CSV
+                </button>
+                <button class="btn btn-secondary" onclick="downloadExcel()" style="display: none;" id="downloadExcelBtn">
+                    📊 Скачать Excel
+                </button>
+                <button class="btn btn-secondary" onclick="downloadGroupCSV()" style="display: none;" id="downloadGroupCsvBtn">
+                    🗂️ Группы CSV
+                </button>
+                <button class="btn btn-secondary" onclick="downloadGroupJSON()" style="display: none;" id="downloadGroupJsonBtn">
+                    🧾 Группы JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let webview;
+        let memberData = [];
+        let scriptInjected = false;
+        let groupScriptInjected = false;
+        let groupStatusInterval = null;
+        let groupStatusCache = { count: 0, lastQuery: '', lastUpdated: null };
+        const GROUP_STATUS_INTERVAL_MS = 4000;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            webview = document.getElementById('browser');
+            setupWebview();
+
+            // Автоматически загружаем Facebook при старте
+            updateStatus('Загружаем Facebook...', false);
+            showLoading(true);
+        });
+
+        function setupWebview() {
+            webview.addEventListener('dom-ready', () => {
+                console.log('WebView готов');
+                showLoading(false);
+                updateStatus('Facebook загружен. Откройте нужную группу', true);
+                
+                // Слушаем события от внедренного скрипта
+                webview.addEventListener('console-message', (e) => {
+                    console.log('WebView console:', e.message);
+                });
+                
+                // Обработка custom событий из webview
+                webview.executeJavaScript(`
+                    document.addEventListener('memberUpdate', (e) => {
+                        console.log('Member count updated:', e.detail.count);
+                    });
+                `);
+                
+                webview.executeJavaScript(`
+                    document.addEventListener('groupSearchUpdate', (e) => {
+                        console.log('Group search data updated:', e.detail);
+                    });
+                `);
+            });
+
+            webview.addEventListener('did-navigate', (event) => {
+                document.getElementById('currentUrl').value = event.url;
+                console.log('Переход на:', event.url);
+                
+                if (event.url.includes('/groups/search')) {
+                    updateStatus('Страница поиска групп загружена. Настройте фильтры и запустите парсер', true);
+                    if (!groupScriptInjected) {
+                        setGroupStatusNote('Готово к запуску парсинга');
+                        toggleGroupDownloadButtons(false);
+                        updateGroupCount(0);
+                    }
+                } else if (event.url.includes('/groups/')) {
+                    updateStatus('Страница группы загружена. Можно запускать скрипт', true);
+                }
+
+                if (groupScriptInjected && !event.url.includes('/groups/search')) {
+                    groupScriptInjected = false;
+                    stopGroupStatusWatcher({ resetNote: true });
+                }
+            });
+
+            webview.addEventListener('did-fail-load', (event) => {
+                console.error('Ошибка загрузки:', event);
+                updateStatus('Ошибка загрузки страницы', false);
+                showLoading(false);
+            });
+        }
+
+        function loadGroup() {
+            const url = document.getElementById('groupUrl').value.trim();
+            if (!url) {
+                alert('Пожалуйста, введите ссылку на группу');
+                return;
+            }
+
+            if (!url.includes('facebook.com/groups/')) {
+                alert('Пожалуйста, введите правильную ссылку на группу Facebook');
+                return;
+            }
+
+            updateStatus('Загружаем группу...', false);
+            showLoading(true);
+            webview.src = url;
+        }
+
+        async function openTelegram() {
+            try {
+                // Открываем ссылку на Telegram через главный процесс
+                const result = await window.electronAPI.openExternal('https://t.me/Userspoi');
+                if (!result.success) {
+                    console.error('Ошибка открытия ссылки:', result.error);
+                    // Fallback - пытаемся открыть через window.open
+                    window.open('https://t.me/Userspoi', '_blank');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                // Fallback - пытаемся открыть через window.open
+                window.open('https://t.me/Userspoi', '_blank');
+            }
+        }
+
+        async function injectScript() {
+            try {
+                // Ждем полной загрузки страницы
+                await new Promise(resolve => {
+                    if (webview.getURL().includes('facebook.com')) {
+                        resolve();
+                    } else {
+                        webview.addEventListener('did-navigate', () => {
+                            if (webview.getURL().includes('facebook.com')) {
+                                setTimeout(resolve, 2000); // Даем время на загрузку
+                            }
+                        });
+                    }
+                });
+
+                const script = await window.electronAPI.getScript();
+                
+                // Внедряем скрипт
+                await webview.executeJavaScript(`
+                    try {
+                        // Очищаем предыдущие данные
+                        window.members_list = [["Profile Id","Full Name","ProfileLink","Bio","Image Src","Groupe Id","Group Joining Text","Profile Type"]];
+                        
+                        // Удаляем предыдущие кнопки
+                        const existingOverlay = document.querySelector('[style*="position: fixed"][style*="z-index: 10"]');
+                        if (existingOverlay) {
+                            existingOverlay.remove();
+                        }
+                        
+                        // Выполняем основной скрипт
+                        ${script}
+                        
+                        // Мониторинг изменений
+                        let lastCount = 0;
+                        const updateInterval = setInterval(() => {
+                            if (window.members_list && window.members_list.length > 1) {
+                                const currentCount = window.members_list.length - 1;
+                                if (currentCount !== lastCount) {
+                                    lastCount = currentCount;
+                                    // Обновляем счетчик через DOM события
+                                    const event = new CustomEvent('memberUpdate', { 
+                                        detail: { 
+                                            count: currentCount,
+                                            data: window.members_list 
+                                        } 
+                                    });
+                                    document.dispatchEvent(event);
+                                }
+                            }
+                        }, 2000);
+                        
+                        console.log('Скрипт успешно внедрен!');
+                        'SUCCESS';
+                    } catch (error) {
+                        console.error('Ошибка выполнения скрипта:', error);
+                        throw error;
+                    }
+                `);
+
+                scriptInjected = true;
+                updateStatus('Скрипт запущен! Автоскролл включен — список участников прокручивается автоматически', true);
+                document.getElementById('downloadBtn').style.display = 'block';
+                document.getElementById('downloadExcelBtn').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Ошибка внедрения скрипта:', error);
+                updateStatus('Ошибка запуска скрипта. Убедитесь что страница загружена', false);
+                alert('Ошибка запуска скрипта:\n' + error.message + '\n\nУбедитесь что:\n1. Страница группы полностью загружена\n2. Вы вошли в Facebook\n3. Находитесь на странице группы');
+            }
+        }
+
+        async function injectGroupParser() {
+            try {
+                const currentUrl = webview.getURL();
+
+                if (!currentUrl || !currentUrl.includes('facebook.com')) {
+                    alert('Откройте страницу Facebook перед запуском парсера групп.');
+                    return;
+                }
+
+                if (!currentUrl.includes('/groups/search')) {
+                    alert('Перейдите на страницу поиска групп Facebook и повторите попытку.');
+                    return;
+                }
+
+                updateStatus('Внедряем парсер групп...', false);
+                setGroupStatusNote('Запуск парсера. Подождите несколько секунд...', false);
+                toggleGroupDownloadButtons(false);
+                updateGroupCount(0);
+
+                const script = await window.electronAPI.getScript('group-search');
+                await webview.executeJavaScript(script);
+
+                groupScriptInjected = true;
+                groupStatusCache = { count: 0, lastQuery: '', lastUpdated: null };
+
+                startGroupStatusWatcher();
+                setGroupStatusNote('Парсер активен. Прокручивайте список, чтобы подгружать новые результаты.', true);
+                updateStatus('Парсер групп активирован. Скролльте вниз для загрузки новых результатов.', true);
+            } catch (error) {
+                console.error('Ошибка внедрения парсера групп:', error);
+                updateStatus('Ошибка запуска парсера групп', false);
+                setGroupStatusNote('Ошибка запуска. Проверьте консоль и повторите попытку.', false);
+                alert('Ошибка запуска парсера групп:\n' + error.message + '\n\nПроверьте, что:\n• Открыта страница https://www.facebook.com/groups/search/\n• Вы авторизованы в Facebook\n• Страница полностью загружена');
+            }
+        }
+
+        /* Запуск парсера профилей */
+        async function scrapeLinks() {
+            // Меняем стиль кнопки на время работы
+            const profileBtn = document.querySelector('.btn-profile-scraper');
+            const originalText = profileBtn.textContent;
+            profileBtn.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+            profileBtn.textContent = '⏳ Запуск парсера профилей...';
+            profileBtn.disabled = true;
+            
+            updateStatus('Выберите файл с профилями Facebook...', true);
+            
+            try {
+                updateStatus('Парсинг профилей в процессе...', true);
+                const result = await window.electronAPI.scrapeLinks();
+                if (result.success) {
+                    const rows = result.data || [];
+                    if (rows.length === 0) {
+                        updateStatus('Нет данных для сохранения', false);
+                        alert('Парсер завершил работу, но данных нет. Убедитесь, что файл содержит валидные ссылки Facebook.');
+                        return;
+                    }
+
+                    updateStatus(`Парсинг завершен! Обработано ${rows.length} профилей`, true);
+
+                    // Заголовки для CSV
+                    const headers = ['Ссылка на объект', 'ФИО', 'Полная карточка объекта', 'Все ссылки'];
+                    const csvData = [headers, ...rows];
+
+                    // Конвертируем в CSV (используем ; как разделитель)
+                    const csvContent = csvData.map(row => 
+                        row.map(field => {
+                            const stringField = field == null ? '' : String(field);
+                            // Экранируем кавычки и добавляем кавычки если есть запятые или переносы
+                            const escapedField = stringField.replace(/"/g, '""');
+                            return /[";,\n]/.test(escapedField) ? `"${escapedField}"` : escapedField;
+                        }).join(';')
+                    ).join('\n');
+
+                    // Сохраняем через Electron API
+                    const saveRes = await window.electronAPI.saveCSV({
+                        data: csvContent,
+                        options: {
+                            defaultPath: `profile-links-${new Date().toISOString().split('T')[0]}.csv`,
+                            filters: [{ name: 'CSV файлы', extensions: ['csv'] }]
+                        }
+                    });
+
+                    if (saveRes.success) {
+                        updateStatus(`CSV файл сохранен: ${saveRes.path}`, true);
+                        
+                        // Подсчитываем статистику
+                        const successfulProfiles = rows.filter(row => row[1] !== 'Ошибка').length;
+                        const totalLinks = rows.reduce((count, row) => {
+                            const linksStr = row[3];
+                            if (linksStr && linksStr !== 'Ссылки не найдены' && linksStr !== 'Ошибка при сборе ссылок') {
+                                return count + linksStr.split(' --- ').length;
+                            }
+                            return count;
+                        }, 0);
+                        
+                        alert(`✅ Парсинг профилей завершен успешно!
+                        
+📊 Статистика:
+• Всего профилей: ${rows.length}
+• Успешно обработано: ${successfulProfiles}
+• Найдено ссылок: ${totalLinks}
+
+📁 Файл сохранен: ${saveRes.path}`);
+                    } else if (saveRes.cancelled) {
+                        updateStatus('Сохранение отменено', true);
+                    } else {
+                        throw new Error(saveRes.error);
+                    }
+                } else if (result.cancelled) {
+                    updateStatus('Выбор файла отменен', true);
+                } else {
+                    throw new Error(result.error || 'Неизвестная ошибка при парсинге');
+                }
+            } catch (error) {
+                console.error('Ошибка парсинга профилей:', error);
+                updateStatus('Ошибка при парсинге профилей', false);
+                alert(`❌ Ошибка при парсинге профилей:
+                
+${error.message}
+
+💡 Возможные причины:
+• Не выбран файл с ссылками
+• Файл не содержит валидных ссылок Facebook
+• Проблемы с авторизацией в Facebook
+• Нестабильное интернет-соединение`);
+            } finally {
+                // Восстанавливаем кнопку
+                profileBtn.style.background = 'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)';
+                profileBtn.textContent = originalText;
+                profileBtn.disabled = false;
+            }
+        }
+
+        /* Запуск скрипта в ручном режиме (без автоскролла) */
+        async function injectScriptManual() {
+            try {
+                updateStatus('Внедрение скрипта (ручной режим)...', true);
+                
+                const browser = document.getElementById('browser');
+                if (!browser || !browser.contentWindow) {
+                    throw new Error('Браузер не загружен');
+                }
+
+                // Получаем скрипт и убираем только автоскролл, оставляя всю логику сбора
+                const scriptContent = await window.electronAPI.getScript();
+                
+                // Заменяем автоскролл на сообщение о ручном режиме
+                const manualScript = scriptContent.replace(
+                    /\/\* Auto-scroll to load more members with stop button \*\/[\s\S]*?\}\)\(\);/,
+                    `/* Manual mode - auto-scroll disabled */
+console.log('[FB Scraper] Manual mode activated - scroll manually to load more members');`
+                );
+                
+                await browser.executeJavaScript(manualScript);
+                
+                updateStatus('Скрипт запущен в ручном режиме! Скроллите вручную для загрузки участников', true);
+                document.getElementById('downloadBtn').style.display = 'block';
+                document.getElementById('downloadExcelBtn').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Ошибка внедрения скрипта:', error);
+                updateStatus('Ошибка запуска скрипта. Убедитесь что страница загружена', false);
+                alert('Ошибка запуска скрипта:\n' + error.message + '\n\nУбедитесь что:\n1. Страница группы полностью загружена\n2. Вы вошли в Facebook\n3. Находитесь на странице группы');
+            }
+        }
+
+        function updateMemberCount(count) {
+            document.getElementById('memberCount').textContent = count;
+            if (count > 0) {
+                document.getElementById('downloadBtn').style.display = 'block';
+                document.getElementById('downloadExcelBtn').style.display = 'block';
+            }
+        }
+
+        function updateGroupCount(count) {
+            const value = Number.isFinite(count) ? count : 0;
+            document.getElementById('groupCount').textContent = value;
+            if (value > 0) {
+                toggleGroupDownloadButtons(true);
+            }
+        }
+
+        function formatGroupStatusNote({ lastQuery, lastUpdated }) {
+            const parts = [];
+            if (lastQuery) {
+                parts.push(`Поиск: "${lastQuery}"`);
+            }
+            if (lastUpdated) {
+                try {
+                    const dt = new Date(lastUpdated);
+                    parts.push(`обновлено ${dt.toLocaleTimeString()}`);
+                } catch (e) {
+                    console.warn('Не удалось преобразовать время обновления групп:', e);
+                }
+            }
+            return parts.length ? parts.join(' · ') : 'Ожидание данных';
+        }
+
+        function setGroupStatusNote(text, isPositive = false) {
+            const note = document.getElementById('groupStatusNote');
+            if (!note) return;
+            note.textContent = text;
+            note.style.color = isPositive ? '#C8E6C9' : 'rgba(255,255,255,0.75)';
+            note.style.fontWeight = isPositive ? '500' : '400';
+        }
+
+        function toggleGroupDownloadButtons(show) {
+            const csvBtn = document.getElementById('downloadGroupCsvBtn');
+            const jsonBtn = document.getElementById('downloadGroupJsonBtn');
+            if (!csvBtn || !jsonBtn) return;
+            const display = show ? 'block' : 'none';
+            csvBtn.style.display = display;
+            jsonBtn.style.display = display;
+        }
+
+        async function pollGroupStatus() {
+            if (!groupScriptInjected) {
+                return;
+            }
+
+            try {
+                const snapshot = await webview.executeJavaScript(`(() => {
+                    const collector = window.__fbGroupSearchCollector;
+                    if (!collector) {
+                        return null;
+                    }
+                    const list = collector.data
+                        ? collector.data
+                        : (collector.dataMap ? Array.from(collector.dataMap.values()) : []);
+
+                    return {
+                        count: Array.isArray(list) ? list.length : 0,
+                        lastQuery: collector.meta && collector.meta.lastQuery ? collector.meta.lastQuery : '',
+                        lastUpdated: collector.lastUpdate || null
+                    };
+                })();`, false);
+
+                if (snapshot) {
+                    groupStatusCache = snapshot;
+                    updateGroupCount(snapshot.count || 0);
+                    setGroupStatusNote(
+                        formatGroupStatusNote(snapshot),
+                        (snapshot.count || 0) > 0
+                    );
+                }
+            } catch (error) {
+                console.error('Ошибка получения статуса парсера групп:', error);
+            }
+        }
+
+        function startGroupStatusWatcher() {
+            stopGroupStatusWatcher();
+            pollGroupStatus();
+            groupStatusInterval = setInterval(pollGroupStatus, GROUP_STATUS_INTERVAL_MS);
+        }
+
+        function stopGroupStatusWatcher({ resetNote = false } = {}) {
+            if (groupStatusInterval) {
+                clearInterval(groupStatusInterval);
+                groupStatusInterval = null;
+            }
+
+            if (resetNote) {
+                setGroupStatusNote('Парсер групп остановлен. Откройте поиск групп, чтобы собрать новые данные.', false);
+                toggleGroupDownloadButtons(false);
+                updateGroupCount(0);
+            }
+        }
+
+        async function getGroupCollectorSnapshot() {
+            try {
+                const snapshot = await webview.executeJavaScript(`(() => {
+                    const collector = window.__fbGroupSearchCollector;
+                    if (!collector) {
+                        return null;
+                    }
+
+                    const headers = collector.headers || [];
+                    const list = collector.data
+                        ? collector.data
+                        : (collector.dataMap ? Array.from(collector.dataMap.values()) : []);
+
+                    return {
+                        headers,
+                        list: Array.isArray(list) ? list : [],
+                        meta: collector.meta || {},
+                        lastUpdated: collector.lastUpdate || null
+                    };
+                })();`, false);
+
+                return snapshot;
+            } catch (error) {
+                console.error('Ошибка получения данных групп:', error);
+                return null;
+            }
+        }
+
+        async function downloadGroupCSV() {
+            try {
+                const snapshot = await getGroupCollectorSnapshot();
+
+                if (!snapshot || !snapshot.list || snapshot.list.length === 0) {
+                    alert('Нет данных для экспорта. Сначала соберите результаты поиска групп.');
+                    return;
+                }
+
+                const headers = snapshot.headers && snapshot.headers.length
+                    ? snapshot.headers
+                    : Object.keys(snapshot.list[0]);
+
+                const rows = [headers, ...snapshot.list.map(item =>
+                    headers.map(key => {
+                        const value = item[key];
+                        const stringValue = value == null ? '' : String(value);
+                        const escaped = stringValue.replace(/"/g, '""');
+                        return /[",;\n]/.test(escaped) ? `"${escaped}"` : escaped;
+                    })
+                )];
+
+                const csvContent = rows.map(row => row.join(';')).join('\n');
+
+                const result = await window.electronAPI.saveCSV({
+                    data: csvContent,
+                    options: {
+                        defaultPath: `fb-groups-${new Date().toISOString().split('T')[0]}.csv`,
+                        filters: [{ name: 'CSV файлы', extensions: ['csv'] }]
+                    }
+                });
+
+                if (result.success) {
+                    updateStatus(`CSV с группами сохранен: ${result.path}`, true);
+                    alert(`Экспорт групп завершен!\n\nВсего групп: ${snapshot.list.length}\nФайл: ${result.path}`);
+                } else if (result.cancelled) {
+                    updateStatus('Сохранение CSV отменено', true);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error('Ошибка экспорта групп в CSV:', error);
+                updateStatus('Ошибка при сохранении CSV с группами', false);
+                alert('Ошибка при сохранении CSV: ' + error.message);
+            }
+        }
+
+        async function downloadGroupJSON() {
+            try {
+                const snapshot = await getGroupCollectorSnapshot();
+
+                if (!snapshot || !snapshot.list || snapshot.list.length === 0) {
+                    alert('Нет данных для экспорта. Сначала соберите результаты поиска групп.');
+                    return;
+                }
+
+                const meta = snapshot.meta || {};
+                const payload = {
+                    exportedAt: new Date().toISOString(),
+                    total: snapshot.list.length,
+                    lastQuery: meta.lastQuery || '',
+                    lastUpdatedAt: snapshot.lastUpdated || null,
+                    totalRequests: meta.totalRequests || 0,
+                    docIds: Array.isArray(meta.docIds) ? meta.docIds : [],
+                    friendlyNames: Array.isArray(meta.friendlyNames) ? meta.friendlyNames : [],
+                    groups: snapshot.list
+                };
+
+                const result = await window.electronAPI.saveJSON({
+                    data: JSON.stringify(payload, null, 2),
+                    options: {
+                        defaultPath: `fb-groups-${new Date().toISOString().split('T')[0]}.json`,
+                        filters: [{ name: 'JSON файлы', extensions: ['json'] }]
+                    }
+                });
+
+                if (result.success) {
+                    updateStatus(`JSON с группами сохранен: ${result.path}`, true);
+                    alert(`Экспорт JSON завершен!\n\nВсего групп: ${snapshot.list.length}\nФайл: ${result.path}`);
+                } else if (result.cancelled) {
+                    updateStatus('Сохранение JSON отменено', true);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error('Ошибка экспорта групп в JSON:', error);
+                updateStatus('Ошибка при сохранении JSON с группами', false);
+                alert('Ошибка при сохранении JSON: ' + error.message);
+            }
+        }
+
+        async function downloadCSV() {
+            try {
+                // Получаем данные из webview
+                const data = await webview.executeJavaScript('window.members_list');
+                
+                if (!data || data.length <= 1) {
+                    alert('Нет данных для экспорта. Убедитесь, что скрипт запущен и собрал участников.');
+                    return;
+                }
+
+                // Конвертируем в CSV
+                const csvContent = data.map(row => 
+                    row.map(field => {
+                        const stringField = field == null ? '' : String(field);
+                        // Экранируем кавычки и добавляем кавычки если есть запятые или переносы
+                        const escapedField = stringField.replace(/"/g, '""');
+                        return /[",\n]/.test(escapedField) ? `"${escapedField}"` : escapedField;
+                    }).join(',')
+                ).join('\n');
+
+                // Сохраняем через Electron API
+                const result = await window.electronAPI.saveCSV({
+                    data: csvContent,
+                    options: {
+                        defaultPath: `group-members-${new Date().toISOString().split('T')[0]}.csv`,
+                        filters: [{ name: 'CSV файлы', extensions: ['csv'] }]
+                    }
+                });
+                
+                if (result.success) {
+                    updateStatus(`CSV файл сохранен: ${result.path}`, true);
+                    alert(`Файл успешно сохранен!\nПуть: ${result.path}\nЭкспортировано записей: ${data.length - 1}`);
+                } else if (result.cancelled) {
+                    updateStatus('Сохранение отменено', true);
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка экспорта:', error);
+                updateStatus('Ошибка при сохранении файла', false);
+                alert('Ошибка при сохранении файла: ' + error.message);
+            }
+        }
+
+        /* Экспорт в Excel */
+        async function downloadExcel() {
+            try {
+                const data = await webview.executeJavaScript('window.members_list');
+                if (!data || data.length <= 1) {
+                    alert('Нет данных для экспорта. Убедитесь, что скрипт запущен и собрал участников.');
+                    return;
+                }
+
+                const result = await window.electronAPI.saveExcel({
+                    rows: data,
+                    options: {
+                        defaultPath: `group-members-${new Date().toISOString().split('T')[0]}.xlsx`,
+                        filters: [{ name: 'Excel файлы', extensions: ['xlsx'] }]
+                    }
+                });
+
+                if (result.success) {
+                    updateStatus(`Excel файл сохранен: ${result.path}`, true);
+                    alert(`Файл успешно сохранен!\nПуть: ${result.path}\nЭкспортировано записей: ${data.length - 1}`);
+                } else if (result.cancelled) {
+                    updateStatus('Сохранение отменено', true);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error('Ошибка экспорта Excel:', error);
+                updateStatus('Ошибка при сохранении файла', false);
+                alert('Ошибка при сохранении файла: ' + error.message);
+            }
+        }
+
+        /* Выход из аккаунта Facebook */
+        async function logout() {
+            try {
+                const res = await window.electronAPI.logout();
+                if (res.success) {
+                    updateStatus('Сессия очищена. Перезагружаем Facebook...', true);
+                    webview.reload();
+                    alert('Вы вышли из аккаунта Facebook. Зайдите в другой аккаунт и продолжайте работу.');
+                } else {
+                    throw new Error(res.error);
+                }
+            } catch (error) {
+                console.error('Ошибка выхода:', error);
+                alert('Ошибка выхода из аккаунта: ' + error.message);
+            }
+        }
+
+        function updateStatus(text, isActive) {
+            document.getElementById('statusText').textContent = text;
+            const indicator = document.getElementById('statusIndicator');
+            if (isActive) {
+                indicator.classList.add('active');
+            } else {
+                indicator.classList.remove('active');
+            }
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.style.display = 'block';
+            } else {
+                loading.style.display = 'none';
+            }
+        }
+
+        // Отслеживаем обновления от webview через postMessage
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'MEMBER_COUNT_UPDATE') {
+                updateMemberCount(event.data.count);
+                memberData = event.data.data;
+            } else if (event.data.type === 'FB_GROUP_SEARCH_UPDATE') {
+                const payload = event.data.payload || {};
+                groupStatusCache = {
+                    count: payload.count || 0,
+                    lastQuery: payload.lastQuery || '',
+                    lastUpdated: payload.lastUpdated || null
+                };
+                updateGroupCount(groupStatusCache.count);
+                setGroupStatusNote(
+                    formatGroupStatusNote(groupStatusCache),
+                    groupStatusCache.count > 0
+                );
+            }
+        });
+    </script>
+</body>
+</html>
