@@ -420,6 +420,7 @@
     }
 
     var descriptionPieces = [];
+    // Пробуем извлечь описание из разных источников
     var descriptionSource = toArray(viewModel.description_snippets_text_with_entities);
     for (var i = 0; i < descriptionSource.length; i++) {
       var piece = sanitizeText(descriptionSource[i] && descriptionSource[i].text);
@@ -427,10 +428,63 @@
         descriptionPieces.push(piece);
       }
     }
+    
+    // Если описание не найдено, пробуем другие места
+    if (descriptionPieces.length === 0) {
+      // Проверяем в profile объекте
+      if (profile.bio_text && profile.bio_text.text) {
+        var bioText = sanitizeText(profile.bio_text.text);
+        if (bioText) {
+          descriptionPieces.push(bioText);
+        }
+      } else if (profile.bio) {
+        var bio = sanitizeText(profile.bio);
+        if (bio) {
+          descriptionPieces.push(bio);
+        }
+      } else if (profile.about) {
+        var about = sanitizeText(profile.about);
+        if (about) {
+          descriptionPieces.push(about);
+        }
+      } else if (profile.description) {
+        var desc = sanitizeText(profile.description);
+        if (desc) {
+          descriptionPieces.push(desc);
+        }
+      }
+      
+      // Также проверяем в других местах viewModel
+      if (descriptionPieces.length === 0 && viewModel.profile_name_with_nickname_or_location_descriptor) {
+        var descriptor = sanitizeText(viewModel.profile_name_with_nickname_or_location_descriptor);
+        var profileName = sanitizeText(profile.name || profile.profile_name_with_possible_nickname || '');
+        if (descriptor && descriptor !== profileName) {
+          descriptionPieces.push(descriptor);
+        }
+      }
+    }
 
     var highlightText = '';
+    // Пробуем извлечь highlight из разных источников
     if (viewModel.prominent_snippet_text_with_entities && viewModel.prominent_snippet_text_with_entities.text) {
       highlightText = sanitizeText(viewModel.prominent_snippet_text_with_entities.text);
+    }
+    
+    // Если highlight не найден, пробуем другие места
+    if (!highlightText) {
+      // Может быть в primary_snippet_text_with_entities есть дополнительная информация
+      if (viewModel.primary_snippet_text_with_entities && viewModel.primary_snippet_text_with_entities.text) {
+        var primaryText = sanitizeText(viewModel.primary_snippet_text_with_entities.text);
+        // Если это не просто memberInfo, используем как highlight
+        if (primaryText && primaryText !== memberInfo) {
+          highlightText = primaryText;
+        }
+      }
+      
+      // Проверяем в profile
+      if (!highlightText && profile.highlight) {
+        highlightText = sanitizeText(profile.highlight);
+      }
     }
 
     var facepileText = '';
