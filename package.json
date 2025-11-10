@@ -1,0 +1,54 @@
+{
+  "name": "fbsoft",
+  "version": "1.2.1",
+  "description": "FBSoft - Facebook Group Members & Profile Scraper",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build-mac": "electron-builder --mac",
+    "build-win": "electron-builder --win",
+    "build-all": "electron-builder --mac --win",
+    "dev": "electron . --dev"
+  },
+  "keywords": [
+    "facebook",
+    "scraper",
+    "electron",
+    "macos"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.yourcompany.facebook-group-scraper",
+    "productName": "FBSoft",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}
